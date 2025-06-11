@@ -142,12 +142,13 @@ TO QUERY PRIVATE DATA OUTSIDE PRESENTATION MODE --- create a private querying ho
 1. Build an API that has custom auth (for however you authenticate your users) and returns a token for the Sanity client to use in calls to client.fetch (this is the simplest approach but has the negative side effect that it exposes the token to the client side, so any logged in user can take that token and take ANY action for which the token is authorized -- usually at a minimum this means making ANY query to your data, but can also even include writing data, updating settings, etc depending on the token).
 2. Have a proxy API that has custom auth and can make queries on your behalf FROM the server, which never exposes the token to client side users. (this allows you to either allow arbitrary queries if all authorized users should be able to make any query OR even allows you to lock down which queries can be made by exposing API routes for individual queries).
 
-Once you have that private querying hook in place, decide at runtime whether to use the Sanity react-loader's useQuery from this file or your own usePrivateQuery depending on whether you are in presentation mode. 
-Determining whether you are in presentation mode can be done with a helper from @sanity/presentation-comlink. Import it with: `import {isMaybePresentation} from '@sanity/presentation-comlink`.
+Once you have defined that private querying hook, decide at runtime whether to call the Sanity React Loader's `useQuery` or your own `usePrivateQuery/useSanityQuery/whatevername` depending on whether you are in Presentation mode. Determining whether you are likely in/not in Presentation mode can be done with a helper from `@sanity/presentation-comlink` called `isMaybePresentation`.
 
-So an example usage might be like: 
+
+So an example conditional usage of the correct hook for the platform/context might be like:
 
 ```
+    const { isMaybePresentation } = import "@sanity/presentation-comlink"
     const usePrivateQuery = import "@/hooks/usePrivateQuery"
     
     <!-- In a real life example, put this "createQueryStore" call in its own module so that it is called ONLY once and imported into components where used -->
