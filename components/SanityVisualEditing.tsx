@@ -57,7 +57,9 @@ export default function SanityVisualEditing() {
     return () => disable()
   }, [pathname])
 
-  useLiveMode({client })
+  if(isWeb && isMaybePresentation()) {
+    useLiveMode({client })
+  }
 
   return null
 }
