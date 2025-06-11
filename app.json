@@ -1,16 +1,15 @@
 {
   "expo": {
-    "name": "sanity-visual-editor-react-native",
-    "slug": "sanity-visual-editor-react-native",
+    "name": "visual-editor-react-native",
+    "slug": "visual-editor-react-native",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "visualeditor",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.johnnypovolny.sanityvisualeditor",
+      "bundleIdentifier": "com.johnnypovolny.visualeditorreactnative",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
@@ -46,7 +45,7 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "12953565-7495-4c28-a3ca-9210679c9fbe"
+        "projectId": "0e097603-cf68-45a4-84ea-3bfa9c1f5e4f"
       }
     }
   }

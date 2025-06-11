@@ -82,11 +82,11 @@ const locationResolver = {locations: {
 #### Steps:
 1. Create a Vercel project for your Expo web app (or a project on a similar hosting service -- MAKE SURE to choose one where you can set custom Content Security Policy headers, see vercel.json in this repo for a valid example header).
 
-2. Create an Expo project for the Expo web builds and add its project ID to `app.json` instead of: 
+2. Create an Expo project for the Expo web builds and add its project ID to `app.json` (replace the existing project ID, not shown for cleanliness): 
 
 ```
 "eas": {
-   "projectId": "12953565-7495-4c28-a3ca-9210679c9fbe" <--- replace with your Expo project ID!
+   "projectId": "" <--- put your Expo project ID here!
 }
 ```
 
@@ -98,8 +98,10 @@ const locationResolver = {locations: {
     EXPO_PUBLIC_SANITY_DATASET=THE DATASET FOR THE ENV
     EXPO_PUBLIC_SANITY_STUDIO_URL=THE URL OF YOUR SANITY STUDIO FOR THE ENV
     ```
+    Only for Vercel: add `ENABLE_EXPERIMENTAL_COREPACK=1`, since corepack is enabled in the `vercel.json` build step.
 
     **When using Vercel:**
+
 
     For local development or local native builds, run "npx vercel env pull" to generate a .env.local file that Expo can use.
     For the deployed Expo web app build, Vercel should pick up the Production env you set up in the Vercel API.
@@ -117,7 +119,7 @@ const locationResolver = {locations: {
     pnpm start
     ```
 
-    Note: If you see an error warning in Cursor/VSCode expo_app/tsconfig.json about `expo/tsconfig.base` not existing, and you have already run the start command for the monorepo or expo by itself (see below), sometimes you need to restart Cursor/VSCode (the IDE seems to have issues picking up the fact that expo starting up clears that error).
+    Note: If you see an error warning in Cursor/VSCode in tsconfig.json about `expo/tsconfig.base` not existing, and you have already run the start command for the repo, sometimes you need to restart Cursor/VSCode (the IDE seems to have issues picking up the fact that expo starting up for the first time creates a .expo folder and clears that type error).
     
 You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
