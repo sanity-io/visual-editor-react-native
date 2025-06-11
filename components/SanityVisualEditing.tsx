@@ -1,4 +1,4 @@
-// app/components/SanityVisualEditing.tsx
+// components/SanityVisualEditing.tsx
 import { useLiveMode } from '@/hooks/useQueryStore';
 import { isWeb } from '@/utils/preview';
 import { isMaybePresentation } from '@sanity/presentation-comlink';
