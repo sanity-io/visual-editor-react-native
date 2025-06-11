@@ -1,0 +1,21 @@
+{
+    "framework": null,
+    "installCommand": "corepack up && pnpm install",
+    "buildCommand": "expo export --platform web --clear",
+    "outputDirectory": "dist",
+    "cleanUrls": true,
+    "rewrites": [
+      { "source": "/(.*)", "destination": "dist/index.html" }
+    ],
+    "headers": [
+      {
+        "source": "/(.*)",
+        "headers": [
+          {
+            "key": "Content-Security-Policy",
+            "value": "frame-ancestors 'self' http://localhost:8081 https://www.sanity.io https://react-native-visual-editor.vercel.app https://rn-visual-editor.sanity.studio"
+          }
+        ]
+      }
+    ]
+}

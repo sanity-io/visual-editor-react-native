@@ -1,0 +1,22 @@
+{
+  "rootDir": "./",
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "strict": true,
+    "paths": {
+      "@/*": [
+        "./*"
+      ]
+    },
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts"
+    ],
+    "exclude": [
+      "dist"
+    ]
+}
