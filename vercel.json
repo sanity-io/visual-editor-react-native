@@ -13,7 +13,7 @@
         "headers": [
           {
             "key": "Content-Security-Policy",
-            "value": "frame-ancestors 'self' http://localhost:8081 https://www.sanity.io https://react-native-visual-editor.vercel.app https://rn-visual-editor.sanity.studio"
+            "value": "frame-ancestors 'self' http://localhost:8081 https://www.sanity.io https://visual-editor-react-native.vercel.app https://rn-visual-editor.sanity.studio"
           }
         ]
       }

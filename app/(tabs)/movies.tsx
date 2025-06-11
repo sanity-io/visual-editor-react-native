@@ -41,8 +41,6 @@ export default function MoviesScreen() {
         const { _id, _type, title, slug, poster } = movie
         const attr = createDataAttributeWebOnly({id: _id, type: _type, path: 'poster'})
 
-        console.log('ATTRIBUTE: ', attr.toString())
-
         return (
           <ThemedView key={slug.current} style={styles.elementContainer}>
             <ThemedView

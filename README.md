@@ -80,7 +80,7 @@ const locationResolver = {locations: {
 #### NOTE: pnpm is recommended, development using other package managers has not been rigorously tested.
 
 #### Steps:
-1. Create a Vercel project for your Expo web app (or a project on a similar hosting service -- MAKE SURE to choose one where you can set custom Content Security Policy headers, see vercel.json in this repo for an example header).
+1. Create a Vercel project for your Expo web app (or a project on a similar hosting service -- MAKE SURE to choose one where you can set custom Content Security Policy headers, see vercel.json in this repo for a valid example header).
 
 2. Create an Expo project for the Expo web builds and add its project ID to `app.json` instead of: 
 

@@ -12,9 +12,6 @@ export default function SanityVisualEditing() {
   const pathname = usePathname()
   const router = useRouter()
 
-  console.log('isWeb', isWeb)
-  console.log('isMaybePresentation', isMaybePresentation())
-
   useEffect(() => {
     const disable = isWeb && isMaybePresentation() ? enableVisualEditing({
       history: {
@@ -58,8 +55,6 @@ export default function SanityVisualEditing() {
     }) : () => null
     return () => disable()
   }, [pathname])
-
-  console.log('useLiveMode', useLiveMode)
 
   useLiveMode({client })
 
