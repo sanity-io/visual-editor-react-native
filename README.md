@@ -162,13 +162,19 @@ So an example usage might be like:
 
 ```
 
-## Live Mode (Inside Presentation vs Outside)
+## Live Content API (Presentation vs User-Facing Application)
 
-When you ARE in Presentation mode, `useLiveMode` as implemented in this repo will use the Live Content API to show you the latest content for whatever "perspective" mode you set in the Presentation UI itself (defaults to "Drafts", but can be changed to other perspectives in that UI, e.g. "Published").
+**In Presentation Mode**
 
-OUTSIDE of presentation mode, to use the Live Content API, you must implement a connection mechanism for it in your project. A package is WIP for an out-of-the-box Live Content API connector for pure React/React Native and will be added to this repo when available, but currently the only out-of-the-box solution is for NextJS.
+When you ARE in Presentation mode, `useLiveMode` as implemented above will use the Sanity Live Content API to show you the latest content for whatever "Perspective" you choose in the Presentation UI itself.  The most common Perspective used is "Drafts", because that will show you all edits to documents, live in real time, but you can also choose "Published", custom perspectives if they are enabled for your studio, etc. 
 
-To see example/starting poing implementations, visit the [`lcapi-examples` Github Repo](https://github.com/sanity-io/lcapi-examples/tree/main).
+**In User-Facing Application**
+
+When you are NOT in Presentation mode, to use the Live Content API, you must implement a connection mechanism for it in your project. A package is WIP for an out-of-the-box Live Content API connector for vanilla React and React Native and will be added to this example when available.
+
+For example/starting point implementations in the meantime, check the [`lcapi-examples` Github Repo](https://github.com/sanity-io/lcapi-examples/tree/main).
+
+Learn more about the [Live Content API here](https://www.sanity.io/docs/live-content-api).
 
 
 ## GOTCHAS (for this repo)
