@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "sanity-visual-editor",
-    "slug": "sanity-visual-editor",
+    "name": "sanity-visual-editor-react-native",
+    "slug": "sanity-visual-editor-react-native",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -46,7 +46,7 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "f7d46a98-bda7-4c64-8804-e1b0b876fde4"
+        "projectId": "12953565-7495-4c28-a3ca-9210679c9fbe"
       }
     }
   }

@@ -5,10 +5,9 @@
   "scripts": {
     "eas-build-pre-install": "corepack enable",
     "start": "npx expo start --clear",
-    "start:vercel": "npx vercel dev",
     "build": "npx expo export -p web",
+    "deploy:web": "npx vercel --prod",
     "build:simulator": "eas build -p ios --profile preview",
-    "deploy": "npx vercel --prod",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",

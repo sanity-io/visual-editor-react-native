@@ -18,6 +18,13 @@ export default function PeopleScreen() {
     return <Loading/>
   }
 
+  if(data.length === 0) {
+    return (
+      <ThemedView style={styles.titleContainer}>
+        <ThemedText type="title">No people found</ThemedText>
+      </ThemedView>
+    )
+  }
 
   return (
     <ParallaxScrollView

@@ -21,6 +21,14 @@ export default function MoviesScreen() {
     )
   }
 
+  if(data.length === 0) {
+    return (
+      <ThemedView style={styles.titleContainer}>
+        <ThemedText type="title">No movies found</ThemedText>
+      </ThemedView>
+    )
+  }
+
   return (
     <ParallaxScrollView
       headerImage={<Image source={require('@/assets/images/movies.jpg')} style={styles.headerImage} />}
