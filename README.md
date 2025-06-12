@@ -80,7 +80,7 @@ const locationResolver = {locations: {
 #### NOTE: pnpm is recommended, development using other package managers has not been rigorously tested.
 
 #### Steps:
-1. Create a Vercel project for your Expo web app (or a project on a similar hosting service -- MAKE SURE to choose one where you can set custom Content Security Policy headers, see vercel.json in this repo for a valid example header).
+1. Create a Vercel project for your Expo web app (or a project on a similar hosting service -- MAKE SURE to choose one where you can set custom Content Security Policy headers, see "Deployment" section below for a valid example header).
 
 2. Create an Expo project for the Expo web builds and add its project ID to `app.json` (replace the existing project ID, not shown for cleanliness): 
 
@@ -186,6 +186,14 @@ I've noticed that very occasionally on a clean install, `pnpm install` does not 
 
 ## Deployment
 #### DON'T DEPLOY THE EXPO WEB APP ON EXPO HOSTING -- Expo hosting adds a Content Security Policy header by default that prevents the Sanity Studio from loading the Expo web app in an iframe. Deploy instead to Vercel, Netlify, or another service that allows you to customize that header. You can/should still build your actual native device/simulator builds using the Expo build servers. 
+
+A valid example header is: 
+```
+"frame-ancestors 'self' http://localhost:8081 https://www.sanity.io https://visual-editor-react-native.vercel.app https://rn-visual-editor.sanity.studio"
+```
+
+In this example, the URLs (in order), are for: the development environment for the React Native app, the origin for sanity.io's Dashboard where the deployed studio is installed, the origin of the deployed React Native app, and the origin of the deployed Sanity Studio itself.
+
 
 ### Shared Setup for Native and Web App builds (app.json)
 Make sure to change the projectId in app.json to your own project's ID.
