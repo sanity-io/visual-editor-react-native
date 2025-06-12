@@ -192,7 +192,11 @@ A valid example header is:
 "frame-ancestors 'self' http://localhost:8081 https://www.sanity.io https://visual-editor-react-native.vercel.app https://rn-visual-editor.sanity.studio"
 ```
 
-In this example, the URLs (in order), are for: the development environment for the React Native app, the origin for sanity.io's Dashboard where the deployed studio is installed, the origin of the deployed React Native app, and the origin of the deployed Sanity Studio itself.
+In this example, the URLs (in order) are for: 
+- a development environment for the React Native app
+- sanity.io's Dashboard (a centralized "content operating system" web application where deployed Studios and Sanity SDK applications are "installed" in a single organization-level view. [Learn more about Dashboard](https://www.sanity.io/docs/dashboard).)
+- your deployed React Native app
+- the individual deployed Sanity Studio.
 
 
 ### Shared Setup for Native and Web App builds (app.json)
