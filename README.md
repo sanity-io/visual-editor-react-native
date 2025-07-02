@@ -2,7 +2,8 @@
 
 The project is a starting point for creating React Native apps (using Expo) which correctly load and are editable within Sanity's Visual Editor (via the Presentation plugin in Sanity studio).
 
-For more information on the implementation in this rep, visit the [Sanity docs on "Visual Editing with React Native and Expo"](https://sanity.io/docs/visual-editing/visual-editing-with-react-native-and-expo).
+For more information on the implementation in this rep, visit Sanity's ["Visual Editing with React Native" docs](https://sanity.io/docs/visual-editing/visual-editing-with-react-native).
+
 
 ## Dependencies/PreWork
 
@@ -75,11 +76,11 @@ const locationResolver = {locations: {
 }}
 ```
 
-## Development
+## Development Setup
 
-#### NOTE: pnpm is recommended, development using other package managers has not been rigorously tested.
+**NOTE: pnpm is recommended, development using other package managers has not been rigorously tested.**
 
-#### Steps:
+### Set up and run the React Native application:
 1. Create a Vercel project for your Expo web app (or a project on a similar hosting service -- MAKE SURE to choose one where you can set custom Content Security Policy headers, see "Deployment" section below for a valid example header).
 
 2. Create an Expo project for the Expo web builds and add its project ID to `app.json` (replace the existing project ID, not shown for cleanliness): 
@@ -102,7 +103,6 @@ const locationResolver = {locations: {
 
     **When using Vercel:**
 
-
     For local development or local native builds, run "npx vercel env pull" to generate a .env.local file that Expo can use.
     For the deployed Expo web app build, Vercel should pick up the Production env you set up in the Vercel API.
 
@@ -120,29 +120,43 @@ const locationResolver = {locations: {
     ```
 
     Note: If you see an error warning in Cursor/VSCode in tsconfig.json about `expo/tsconfig.base` not existing, and you have already run the start command for the repo, sometimes you need to restart Cursor/VSCode (the IDE seems to have issues picking up the fact that expo starting up for the first time creates a .expo folder and clears that type error).
-    
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
-**The main goal of this repo is to be able to open the Expo app INSIDE of Sanity Studio** 
+The Expo app will now be running and can be opened in the browser (project default host is `http://localhost:8081`) or in the iOS simulator (see the console in the terminal window that is running Expo for instructions on the different options/features enabled by Expo Go).
+    
+### Run the Sanity Studio and load the React Native app in Presentation mode:
+**The main goal of this repo is to be able to open the Expo app INSIDE of Sanity Studio, so once you have started the expo app** 
 
 So once you have started up the expo app:
 1. Start the Sanity Studio steps above (start it up from its repo/directory -- the Studio code is not present in this codebase). 
-2. Once that studio is running locally, visit `http://localhost:3333` (or whatever port you've configured for your studio, 3333 is the default)
-3. Click the "Presentation" tab.
+2. Once that studio is running locally, visit the locally running studio (Sanity default host is `http://localhost:3333`)
+3. Click the "Presentation" tab to view the React Native app inside your Sanity Studio.
 
 
+## Development
+You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
-## Public vs Private Datasets 
-NOTE the `useQuery` hook from `@sanity/react-loader` does not currently support a "token" parameter, so it does not currently support querying private data when you are NOT in Presentation mode in the Sanity Studio.
+### Required Background Knowledge
+You will almost certainly want to edit the home screen contents, remove the movies/people pages/components, and add your own pages/components, but you'll need to understand how to use several key features before modifying/removing any code. These features are: 
+- `useQuery`: This hook is required in order to load data from Sanity (which is automatically kept up to date when in Presentation mode -- under the hood the `useLiveMode` hook takes over, but your components should just need `useQuery` because `useLiveMode` is already configured at the app root inside the `SanityVisualEditing` component).
+- `dataSet`: This prop for React Native scalar components (`Image`, `Text`, `View`, etc) is optional, used to enable Visual Editing features for non-text elements. Text elements (strings, rich text, etc) already have click-to-edit enabled by default (because of the `stega` option on our Sanity client). If you want to enable overlays for non-text elements, drag-and-drop for sortable arrays of content blocks, etc, you need to pass `{ sanity: attr }` where the `attr` is a sanity data attribute created using `createDataAttributeWebOnly` from [/utils/preview](/utils/preview.ts). 
+
+**To understand how to use both of these features in your own pages/components:** 
+- Check out the [/app/(tabs)/movies.tsx](/app/(tabs)/movies.tsx) file (uses `useQuery` for data and `dataSet` to enable click-to-edit poster images) and the [/app/movie/[movie_slug].tsx](/app/movie/[movie_slug].tsx) file (uses `useQuery` for data fetching and `dataSet` to enable drag-and-drop  cast members list).**
+- read Sanity's ["Visual Editing with React Native" docs](https://sanity.io/docs/visual-editing/visual-editing-with-react-native).
+
+### Public vs Private Datasets 
+NOTE the `useQuery` hook from `@sanity/react-loader` does not currently support a "token" parameter, so it does not currently support querying a **private dataset** when you are NOT in Presentation mode in the Sanity Studio.
+
+
 When you ARE in Presentation mode in the Sanity Studio, the `useLiveMode` hook takes over from `useQuery` for data fetching. 
 That useLiveMode hook fetches data using a session cookie (set by the Presentation Plugin) to make queries that can include private data and draft content (for live editing updates).
 The useLiveMode hook respects the user's role when determining which data/content types that user can access in Presentation mode (including Custom Roles).
 
-TO QUERY PRIVATE DATA OUTSIDE PRESENTATION MODE --- create a private querying hook (call it `usePrivateQuery` or `useSanityQuery` or whatever you prefer) that allows you to perform token-authorized queries. Howeveer, NEVER EVER add that token to the client side bundle/environment, **IT IS AN API KEY**. Some example approaches for how to perform such queries:
+TO QUERY PRIVATE DATA OUTSIDE PRESENTATION MODE --- create a private querying hook (call it `usePrivateQuery` or `useSanityQuery` or whatever you prefer) that allows you to perform token-authorized queries. However, NEVER add that token to the client side bundle/environment, since **IT IS AN API KEY**. Some example approaches for how to perform secure queries to private datasets in your private querying hook:
 1. Build an API that has custom auth (for however you authenticate your users) and returns a token for the Sanity client to use in calls to client.fetch (this is the simplest approach but has the negative side effect that it exposes the token to the client side, so any logged in user can take that token and take ANY action for which the token is authorized -- usually at a minimum this means making ANY query to your data, but can also even include writing data, updating settings, etc depending on the token).
 2. Have a proxy API that has custom auth and can make queries on your behalf FROM the server, which never exposes the token to client side users. (this allows you to either allow arbitrary queries if all authorized users should be able to make any query OR even allows you to lock down which queries can be made by exposing API routes for individual queries).
 
-Once you have defined that private querying hook, decide at runtime whether to call the Sanity React Loader's `useQuery` or your own `usePrivateQuery/useSanityQuery/whatevername` depending on whether you are in Presentation mode. Determining whether you are likely in/not in Presentation mode can be done with a helper from `@sanity/presentation-comlink` called `isMaybePresentation`.
+Once you have defined that private querying hook, decide conditionally at runtime whether to call the Sanity React Loader's `useQuery` or your own `usePrivateQuery` (or whatever you've named it), depending on whether you are in Presentation mode in the weg context. Determining whether you are in Presentation mode can be done with a helper from `@sanity/presentation-comlink` called `isMaybePresentation` and the web context can be checked using the `isWeb` util from this repo.
 
 
 So an example conditional usage of the correct hook for the platform/context might be like:
@@ -150,20 +164,21 @@ So an example conditional usage of the correct hook for the platform/context mig
 ```
     const { isMaybePresentation } = import "@sanity/presentation-comlink"
     const usePrivateQuery = import "@/hooks/usePrivateQuery"
+    const { isWeb } = import '@/utils/preview";
     
     <!-- In a real life example, put this "createQueryStore" call in its own module so that it is called ONLY once and imported into components where used -->
 
     const { useLiveMode, useQuery} = createQueryStore({ client, ssr:false })
 
     function SomeComponent {
-        const { data } = isMaybePresentation() ? useQuery(query) : usePrivateQuery()
+        const { data } = isWeb && isMaybePresentation() ? useQuery(query) : usePrivateQuery()
 
         return <div>...contents</div>
     }
 
 ```
 
-## Live Content API (Presentation vs User-Facing Application)
+### Live Content API (Presentation vs User-Facing Application)
 
 **In Presentation Mode**
 
