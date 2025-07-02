@@ -185,7 +185,7 @@ I've noticed that very occasionally on a clean install, `pnpm install` does not 
 
 
 ## Deployment
-#### DON'T DEPLOY THE EXPO WEB APP ON EXPO HOSTING -- Expo hosting adds a Content Security Policy header by default that prevents the Sanity Studio from loading the Expo web app in an iframe. Deploy instead to Vercel, Netlify, or another service that allows you to customize that header. You can/should still build your actual native device/simulator builds using the Expo build servers. 
+#### This repo uses the Expo build servers to generate builds of your React Native app (web, simulator, device) and uses Vercel to host the web build (for loading in Presentation). You are not required to use Vercel but whatever service you choose MUST allow you to customize the Content Security Policy header used by the web app. VERIFY that the hosting service allows this before choosing a provider.
 
 A valid example header is: 
 ```
@@ -213,9 +213,9 @@ In this codebase, I've set the projet up to deploy the web build of the Expo app
 pnpm deploy:web
 ```
 
-**I've configured the web app's vercel.json to add a correct CSP header that allows my own sanity studio URL to load this web app in an iframe (see vercel.json). Update the CSP header rewrite in vercel.json to use your own studio URL or refactor the codebase to use a different hosting service (see warning above about Expo Hosting and Presentation mode; the two are incompatible at this time due to configuration constraints in Expo).**
+**I've configured the web app's vercel.json to add a correct CSP header that allows my own sanity studio URL to load this web app in an iframe (see vercel.json). Update the CSP header rewrite in vercel.json to use your own studio URL or refactor the codebase to use a different hosting service (as long as it can set the Content Security Policy header, see the warning above).**
 
-Update any URLs in the Studio's project CORS origins accordingly. Any host that wants to query your project has to be allowed in those project CORS settings (set Allow Credentials to true).
+Add all deployment and local development URLs for this project to the Sanity project's CORS origins. Any host that wants to query your data in Sanity has to be configured in those project CORS settings (set Allow Credentials to true). Use the [Sanity Manage](https://sanity.io/manage) console to update CORS settings.
 
 ## Other Notes
 Several standard modules from Node that are part of the @sanity library but are not in the React Native runtime are shimmed using metro.config.js. Run the expo start command above with the `--clear` flag to clear the metro cache if you make additions/modifications to those shims for your own use case.
