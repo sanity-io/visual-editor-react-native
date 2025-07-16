@@ -5,7 +5,10 @@
     "outputDirectory": "dist",
     "cleanUrls": true,
     "rewrites": 
-      [{ "source": "/(.*)", "destination": "/index" }],    
+      [
+        { "source": "/movie/:movie_slug", "destination": "/movie/[movie_slug]" },
+        { "source": "/person/:person_slug", "destination": "/person/[person_slug]" }
+      ],    
     "headers": [
       {
         "source": "/(.*)",
