@@ -3,10 +3,8 @@
     "installCommand": "corepack up && pnpm install",
     "buildCommand": "expo export --platform web --clear",
     "outputDirectory": "dist",
-    "cleanUrls": true,
-    "rewrites": [
-      { "source": "/(.*)", "destination": "dist/index.html" }
-    ],
+    "rewrites": 
+      [{ "source": "/(.*)", "destination": "/index.html" }],    
     "headers": [
       {
         "source": "/(.*)",

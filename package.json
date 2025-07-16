@@ -17,6 +17,7 @@
   "dependencies": {
     "@emotion/unitless": "^0.10.0",
     "@expo/metro-config": "^0.20.14",
+    "@expo/metro-runtime": "^5.0.4",
     "@expo/vector-icons": "^14.1.0",
     "@portabletext/react-native": "^1.1.13",
     "@react-native-async-storage/async-storage": "2.1.2",
