@@ -6,7 +6,7 @@
     "eas-build-pre-install": "corepack enable",
     "start": "npx expo start --clear",
     "build": "npx expo export -p web",
-    "deploy:web": "npx vercel --prod",
+    "deploy:web": "npx expo export -p web && npx eas deploy",
     "build:simulator": "eas build -p ios --profile preview",
     "android": "expo start --android",
     "ios": "expo start --ios",
