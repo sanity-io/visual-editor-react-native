@@ -6,7 +6,8 @@
     "eas-build-pre-install": "corepack enable",
     "start": "npx expo start --clear",
     "build": "npx expo export -p web",
-    "deploy:web": "npx vercel --prod",
+    "deploy:web:staging": "pnpm build && npx eas deploy",
+    "deploy:web:prod": "pnpm build && npx eas deploy --prod",
     "build:simulator": "eas build -p ios --profile preview",
     "android": "expo start --android",
     "ios": "expo start --ios",
@@ -67,11 +68,9 @@
     "@babel/core": "^7.25.2",
     "@types/express": "^5.0.2",
     "@types/react": "~19.0.10",
-    "@vercel/node": "^5.2.1",
     "eslint": "^9.25.0",
     "eslint-config-expo": "~9.2.0",
     "metro": "^0.82.4",
-    "typescript": "5.8.3",
-    "vercel": "^42.3.0"
+    "typescript": "5.8.3"
   }
 }

@@ -1,8 +1,6 @@
 # dependencies
 node_modules/
 
-.vercel
-
 # Expo
 .expo/
 dist/
@@ -39,6 +37,3 @@ yarn-error.*
 *.tsbuildinfo
 
 app-example
-
-.vercel
-
