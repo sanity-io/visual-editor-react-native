@@ -318,13 +318,16 @@ Occasionally on a clean install, `pnpm install` does not seem to install all of 
 
 ### Content Security Policy (CSP)
 
-You are not required to use EAS Hosting but depending on the service you choose, you may be required to customize the Content Security Policy header used by the web app in order for the Presentation tool to load it in an iframe inside the Sanity Studio.
-Before choosing a hosting service, verify that either
-1) that provider does not constrain loading deployed web apps in an iframe on a different hostname
-OR
-2. that provider allows customization of the CSP header
+You are not required to use EAS Hosting. However, certain services will prevent deployed web apps that they host from being loaded in an iframe on a different hostname. 
 
-If neither of these are the case, you would deploy, try to open the Presentation tool, and get a Content Security Policy error message in the browser devtools.
+The Presentation tool opens your deployed web app in an iframe (and since that happens in your Sanity Studio, the hostname is different from the host of your web app). If this is prohibited by default by the hosting service, you may be required to customize the Content Security Policy header used by the web app.
+
+Before choosing a hosting service, verify that either:
+
+- the hosting provider does not prevent its hosted apps from being opened in an iframe on a different host
+
+OR
+- the provider allows customization of the CSP header
 
 Should you need to configure it, a valid example CSP header is:
 
