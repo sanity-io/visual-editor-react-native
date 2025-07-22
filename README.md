@@ -254,10 +254,10 @@ This repo uses the Expo build servers to generate builds of your React Native ap
 Deploy your Expo app to EAS Hosting with:
 
 ```sh
-npx expo export -p web && npx eas deploy
+pnpm deploy:web
 ```
 
-You will get a URL for the deployed app, which you will need to update in the `previewUrl` in your `sanity.config.ts` file.
+You will get a URL for the deployed app, which you will need to update in the `previewUrl` in your `sanity.config.ts` file (and then redeploy the sanity studio).
 
 ```ts
 // sanity.config.ts
@@ -295,8 +295,6 @@ In this codebase, I've set the project up to deploy the web build of the Expo ap
 pnpm deploy:web
 ```
 
-**I've configured the web app's vercel.json to add a correct CSP header that allows my own sanity studio URL to load this web app in an iframe (see vercel.json). Update the CSP header rewrite in vercel.json to use your own studio URL or refactor the codebase to use a different hosting service (as long as it can set the Content Security Policy header, see the warning above).**
-
 Add all deployment and local development URLs for this project to the Sanity project's CORS origins. Any host that wants to query your data in Sanity has to be configured in those project CORS settings (set Allow Credentials to true). Use the [Sanity Manage](https://sanity.io/manage) console to update CORS settings.
 
 ## Gotchas for this repo
@@ -310,20 +308,26 @@ Occasionally on a clean install, `pnpm install` does not seem to install all of 
 
 ### Content Security Policy (CSP)
 
-You are not required to use EAS Hosting but whatever service you choose may require you to customize the Content Security Policy header used by the web app. Verify that the hosting service allows this before choosing a provider.
+You are not required to use EAS Hosting but depending on the service you choose, you may be required to customize the Content Security Policy header used by the web app in order for the Presentation tool to load it in an iframe inside the Sanity Studio.
+Before chosing a hosting service, verify that either
+1) that provider does not constrain loading deployed web apps in an iframe on a different hostname
+OR
+2. allows customization of the CSP header
 
-A valid example header is:
+If neither of these are the case, you would deploy, try to open the Presentation tool, and get a Content Security Policy error message in the browser devtools.
+
+Should you need to configure it, a valid example CSP header is:
 
 ```
-"frame-ancestors 'self' http://localhost:8081 https://www.sanity.io https://visual-editor-react-native.vercel.app https://rn-visual-editor.sanity.studio"
+"frame-ancestors 'self' http://localhost:8081 https://www.sanity.io <INSERT WEB BUILD DEPLOYED URL HERE> <INSERT DEPLOYED SANITY STUDIO URL HERE>"
 ```
 
 In this example, the URLs (in order) are for:
 
 - a development environment for the React Native app
 - sanity.io's Dashboard (a centralized "content operating system" web application where deployed Studios and Sanity SDK applications are "installed" in a single organization-level view. [Learn more about Dashboard](https://www.sanity.io/docs/dashboard).)
-- your deployed React Native app
-- the individual deployed Sanity Studio.
+- the deployed web build of your React Native app 
+- the deployed instance of your Sanity Studio.
 
 ## Other Notes
 
