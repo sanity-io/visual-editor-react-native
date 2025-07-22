@@ -254,8 +254,14 @@ This repo uses the Expo build servers to generate builds of your React Native ap
 Deploy your Expo app to EAS Hosting with:
 
 ```sh
-pnpm deploy:web
+pnpm deploy:web:staging
 ```
+OR
+```
+pnpm deploy:web:prod
+```
+depending on the desired EAS Hosting configuration (the prod script deploys with the `--prod` flag).
+
 
 You will get a URL for the deployed app, which you will need to update in the `previewUrl` in your `sanity.config.ts` file (and then redeploy the sanity studio).
 
@@ -292,7 +298,11 @@ Follow Expo's guides building for iOS simulator, iOS, Android, etc and chosen en
 In this codebase, I've set the project up to deploy the web build of the Expo app to Expo Application Services with:
 
 ```
-pnpm deploy:web
+pnpm deploy:web:staging
+```
+and 
+```
+pnpm deploy:web:prod
 ```
 
 Add all deployment and local development URLs for this project to the Sanity project's CORS origins. Any host that wants to query your data in Sanity has to be configured in those project CORS settings (set Allow Credentials to true). Use the [Sanity Manage](https://sanity.io/manage) console to update CORS settings.
