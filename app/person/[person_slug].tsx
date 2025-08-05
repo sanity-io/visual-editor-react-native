@@ -18,7 +18,7 @@ export default function PersonScreen() {
     _type,
     name,
     slug { current },
-    image { ..., asset -> { url } },
+    image{..., asset->{url}},
   }`
 
   const { data } = useQuery<Person>(query, { person_slug })
@@ -27,8 +27,10 @@ export default function PersonScreen() {
     return <Loading/>
   }
 
+
+
   const { _id, _type, name, image } = data
-  const attr = createDataAttributeWebOnly({
+  const imageAttr = createDataAttributeWebOnly({
     id: _id,
     type: _type,
     path: 'image'
@@ -36,16 +38,14 @@ export default function PersonScreen() {
 
   return (
     <ParallaxScrollView
-      headerImage={<Image
-        source={require('@/assets/images/actors.jpg')} style={styles.headerImage} />}
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
+      headerImage={<Image 
+        // @ts-expect-error The react-native-web TS types haven't been updated to support dataSet.
+        dataSet={{ sanity: imageAttr.toString() }}
+        source={image ? { uri: urlFor(image)?.url() } : require('@/assets/images/actors.jpg')} style={styles.headerImage} resizeMode="contain" />}
+      headerBackgroundColor={{ light: '#FFF', dark: '#1D3D47' }}
     >
       <Link style={styles.link} href="/people">All People</Link>
       <ThemedView style={styles.centeredFlexContainer}>
-        {image && <Image
-          // @ts-expect-error The react-native-web TS types haven't been updated to support dataSet.
-          dataSet={{ sanity: attr.toString() }}
-          source={{ uri: urlFor(image).url() }} style={{ height: 300, width: 300 }} />}
       </ThemedView>
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">{name}</ThemedText>

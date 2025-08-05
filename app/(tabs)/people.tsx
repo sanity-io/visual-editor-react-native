@@ -29,7 +29,7 @@ export default function PeopleScreen() {
   return (
     <ParallaxScrollView
       headerImage={<Image source={require('@/assets/images/actors.jpg')} style={styles.headerImage} />}
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
+      headerBackgroundColor={{ light: '#FFF', dark: '#1D3D47' }}
     >
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">People:</ThemedText>

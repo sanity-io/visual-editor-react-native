@@ -38,7 +38,7 @@ export default function MovieScreen() {
   )
 
   const peopleQuery = groq`*[_type == "person" && _id in $personIds]{ ..., image{ ..., asset->{ url } } }`
-  const {data: resolvedPeople = []} = useQuery<Person[]>(peopleQuery, { personIds: castMembersOptimistic.map(castMember => castMember.person._ref) })
+  const {data: resolvedPeople = []} = useQuery<Person[]>(peopleQuery, { personIds: castMembersOptimistic.map(castMember => castMember?.person?._ref) })
 
     // Your Sanity configuration
   const config = {
@@ -58,17 +58,26 @@ export default function MovieScreen() {
   }
 
   const castMembersWithPeople = castMembersOptimistic.map(castMember => {
-    const person = resolvedPeople?.find((person: Person) => person._id === castMember.person._ref) || { name: 'Unknown', image: { asset: { url: '' } } }
+    const person = resolvedPeople?.find((person: Person) => person?._id === castMember?.person?._ref) || { name: 'Unknown', image: { asset: { url: '' } } }
     return {
       ...castMember,
       person
     }
   })
+
+  const posterAttr = createDataAttributeWebOnly({
+    id: _id,
+    type: _type,
+    path: 'poster'
+  })
     
   return (
     <ParallaxScrollView
-      headerImage={<Image source={poster ? { uri: urlFor(poster).url() } : require('@/assets/images/movies.jpg')} style={styles.headerImage} />}
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
+      headerImage={<Image 
+        // @ts-expect-error The react-native-web TS types haven't been updated to support dataSet.
+        dataSet={{sanity: posterAttr.toString()}}
+        source={poster ? { uri: urlFor(poster)?.url() } : require('@/assets/images/movies.jpg')} style={styles.headerImage} resizeMode="contain" />}
+      headerBackgroundColor={{ light: '#FFF', dark: '#1D3D47' }}
       useTabBar={false}
     >
       <Link style={styles.link} href="/movies">All Movies</Link>
@@ -102,7 +111,7 @@ export default function MovieScreen() {
             path: `castMembers[_key=="${_key}"]`,
 
           })
-          const imageUrl = image?.asset?.url ? urlFor(image).url() : ''
+          const imageUrl = image?.asset?.url ? urlFor(image)?.url() : ''
 
           return (
             <ThemedView

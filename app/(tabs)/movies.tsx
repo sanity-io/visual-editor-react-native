@@ -32,7 +32,7 @@ export default function MoviesScreen() {
   return (
     <ParallaxScrollView
       headerImage={<Image source={require('@/assets/images/movies.jpg')} style={styles.headerImage} />}
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
+      headerBackgroundColor={{ light: '#FFF', dark: '#1D3D47' }}
     >
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Movies:</ThemedText>
@@ -40,17 +40,18 @@ export default function MoviesScreen() {
       {data?.map((movie: Movie) => {
         const { _id, _type, title, slug, poster } = movie
         const attr = createDataAttributeWebOnly({id: _id, type: _type, path: 'poster'})
+        const image = urlFor(poster)?.url()
 
         return (
           <ThemedView key={slug.current} style={styles.elementContainer}>
             <ThemedView
             >
-              <Image
+              {image && <Image
                 // @ts-expect-error The react-native-web TS types haven't been updated to support dataSet.
                 dataSet={{ sanity: attr.toString() }}
-                source={{ uri: urlFor(poster).url() }}
+                source={{ uri:image }}
                 style={styles.image}
-              />
+              />}
             </ThemedView>
             <ThemedText type="default">
               <Link 
