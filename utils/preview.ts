@@ -14,7 +14,6 @@ const config = {
 
 export const createDataAttributeProp = (attr: CreateDataAttributeProps) => {
   if (isWeb) {
-    console.log('creating data attribute', {attr})
     const attribute = createDataAttribute({...config, ...attr})?.toString()
     if (attribute) {
       return {dataSet: {sanity: attribute}}
