@@ -2,7 +2,6 @@ import Loading from '@/components/Loading';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { SANITY_DATASET, SANITY_PROJECT_ID, SANITY_STUDIO_URL } from '@/constants';
 import useOptimistic from '@/hooks/useOptimistic';
 import { useQuery } from '@/hooks/useQueryStore';
 import { CastMember, Movie, Person } from '@/types/sanity';
@@ -40,14 +39,7 @@ export default function MovieScreen() {
   const peopleQuery = groq`*[_type == "person" && _id in $personIds]{ ..., image{ ..., asset->{ url } } }`
   const {data: resolvedPeople = []} = useQuery<Person[]>(peopleQuery, { personIds: castMembersOptimistic.map(castMember => castMember?.person?._ref) })
 
-    // Your Sanity configuration
-  const config = {
-    projectId: SANITY_PROJECT_ID,
-    dataset: SANITY_DATASET,
-    baseUrl: SANITY_STUDIO_URL,
-  }
   const movieAttr = createDataAttributeWebOnly({
-    ...config,
     id: _id,
     type: _type,
     path: 'castMembers'
@@ -105,7 +97,6 @@ export default function MovieScreen() {
 
 
           const castMemberAttr = createDataAttributeWebOnly({
-            ...config,
             id: _id,
             type: _type,
             path: `castMembers[_key=="${_key}"]`,
