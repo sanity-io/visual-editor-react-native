@@ -12,8 +12,13 @@ const config = {
   baseUrl: SANITY_STUDIO_URL,
 }
 
-export const createDataAttributeWebOnly = (attr: CreateDataAttributeProps) => {
+export const createDataAttributeProp = (attr: CreateDataAttributeProps) => {
   if (isWeb) {
-    return createDataAttribute({...config, ...attr})
+    console.log('creating data attribute', {attr})
+    const attribute = createDataAttribute({...config, ...attr})?.toString()
+    if (attribute) {
+      return {dataSet: {sanity: attribute}}
+    }
   }
+  return undefined
 }

@@ -4,7 +4,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useQuery } from '@/hooks/useQueryStore';
 import { Person } from '@/types/sanity';
-import { createDataAttributeWebOnly } from '@/utils/preview';
+import { createDataAttributeProp } from '@/utils/preview';
 import { sharedStyles as styles } from '@/utils/styles';
 import { Link } from 'expo-router';
 import groq from 'groq';
@@ -36,7 +36,7 @@ export default function PeopleScreen() {
       </ThemedView>
       {data?.map((person: Person) => {
         const { _id, _type, image, slug, name } = person
-        const imageAttr = createDataAttributeWebOnly({
+        const imageAttr = createDataAttributeProp({
           id: _id,
           type: _type,
           path: 'image'
@@ -44,8 +44,7 @@ export default function PeopleScreen() {
 
         return (<ThemedView key={slug.current} style={styles.elementContainer}>
           <Image 
-          // @ts-expect-error The react-native-web TS types haven't been updated to support dataSet.
-          dataSet={{ sanity: imageAttr.toString() }}
+          {...imageAttr}
           source={{ uri: image?.asset?.url }} style={styles.image} />
           <ThemedText type="default">
               <Link 

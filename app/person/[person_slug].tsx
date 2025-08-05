@@ -5,7 +5,7 @@ import { ThemedView } from '@/components/ThemedView';
 import { useQuery } from '@/hooks/useQueryStore';
 import { Person } from '@/types/sanity';
 import { urlFor } from '@/utils/image_url';
-import { createDataAttributeWebOnly } from '@/utils/preview';
+import { createDataAttributeProp } from '@/utils/preview';
 import { sharedStyles as styles } from '@/utils/styles';
 import { Link, useLocalSearchParams } from 'expo-router';
 import groq from 'groq';
@@ -30,7 +30,7 @@ export default function PersonScreen() {
 
 
   const { _id, _type, name, image } = data
-  const imageAttr = createDataAttributeWebOnly({
+  const imageAttr = createDataAttributeProp({
     id: _id,
     type: _type,
     path: 'image'
@@ -39,8 +39,7 @@ export default function PersonScreen() {
   return (
     <ParallaxScrollView
       headerImage={<Image 
-        // @ts-expect-error The react-native-web TS types haven't been updated to support dataSet.
-        dataSet={{ sanity: imageAttr.toString() }}
+        {...imageAttr}
         source={image ? { uri: urlFor(image)?.url() } : require('@/assets/images/actors.jpg')} style={styles.headerImage} resizeMode="contain" />}
       headerBackgroundColor={{ light: '#FFF', dark: '#1D3D47' }}
     >

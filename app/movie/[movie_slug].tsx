@@ -6,7 +6,7 @@ import useOptimistic from '@/hooks/useOptimistic';
 import { useQuery } from '@/hooks/useQueryStore';
 import { CastMember, Movie, Person } from '@/types/sanity';
 import { urlFor } from '@/utils/image_url';
-import { createDataAttributeWebOnly } from '@/utils/preview';
+import { createDataAttributeProp } from '@/utils/preview';
 import { sharedStyles as styles } from '@/utils/styles';
 import { PortableText } from '@portabletext/react-native';
 import { Link, useLocalSearchParams } from 'expo-router';
@@ -39,12 +39,6 @@ export default function MovieScreen() {
   const peopleQuery = groq`*[_type == "person" && _id in $personIds]{ ..., image{ ..., asset->{ url } } }`
   const {data: resolvedPeople = []} = useQuery<Person[]>(peopleQuery, { personIds: castMembersOptimistic.map(castMember => castMember?.person?._ref) })
 
-  const movieAttr = createDataAttributeWebOnly({
-    id: _id,
-    type: _type,
-    path: 'castMembers'
-  })
-
   if (!data) {
     return <Loading/>
   }
@@ -57,17 +51,23 @@ export default function MovieScreen() {
     }
   })
 
-  const posterAttr = createDataAttributeWebOnly({
+  const movieAttr = createDataAttributeProp({
+    id: _id,
+    type: _type,
+    path: 'castMembers'
+  })
+
+  const posterAttr = createDataAttributeProp({
     id: _id,
     type: _type,
     path: 'poster'
   })
+
     
   return (
     <ParallaxScrollView
       headerImage={<Image 
-        // @ts-expect-error The react-native-web TS types haven't been updated to support dataSet.
-        dataSet={{sanity: posterAttr.toString()}}
+        {...posterAttr}
         source={poster ? { uri: urlFor(poster)?.url() } : require('@/assets/images/movies.jpg')} style={styles.headerImage} resizeMode="contain" />}
       headerBackgroundColor={{ light: '#FFF', dark: '#1D3D47' }}
       useTabBar={false}
@@ -88,15 +88,14 @@ export default function MovieScreen() {
 
 
       <ThemedView 
-        // @ts-expect-error The react-native-web TS types haven't been updated to support dataSet.
-        dataSet={{sanity: movieAttr.toString()}}
+        {...movieAttr}
         style={styles.list}>
         <ThemedText type="subtitle">Cast</ThemedText>
         {castMembersWithPeople?.map((castMember) => {
           const {_key, characterName, person: { name, image }} = castMember
 
 
-          const castMemberAttr = createDataAttributeWebOnly({
+          const castMemberAttr = createDataAttributeProp({
             id: _id,
             type: _type,
             path: `castMembers[_key=="${_key}"]`,
@@ -106,8 +105,7 @@ export default function MovieScreen() {
 
           return (
             <ThemedView
-            // @ts-expect-error The react-native-web TS types haven't been updated to support dataSet.
-            dataSet={{sanity: castMemberAttr.toString()}}
+            {...castMemberAttr}  
             key={_key}
             style={styles.elementContainer}
             >

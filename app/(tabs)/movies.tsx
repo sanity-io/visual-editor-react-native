@@ -5,7 +5,7 @@ import { ThemedView } from '@/components/ThemedView';
 import { useQuery } from '@/hooks/useQueryStore';
 import { Movie } from '@/types/sanity';
 import { urlFor } from '@/utils/image_url';
-import { createDataAttributeWebOnly } from '@/utils/preview';
+import { createDataAttributeProp } from '@/utils/preview';
 import { sharedStyles as styles } from '@/utils/styles';
 import { Link } from 'expo-router';
 import groq from 'groq';
@@ -39,7 +39,7 @@ export default function MoviesScreen() {
       </ThemedView>
       {data?.map((movie: Movie) => {
         const { _id, _type, title, slug, poster } = movie
-        const posterAttr = createDataAttributeWebOnly({id: _id, type: _type, path: 'poster'})
+        const posterAttr = createDataAttributeProp({id: _id, type: _type, path: 'poster'})
         const image = urlFor(poster)?.url()
 
         return (
@@ -47,8 +47,7 @@ export default function MoviesScreen() {
             <ThemedView
             >
               {image && <Image
-                // @ts-expect-error The react-native-web TS types haven't been updated to support dataSet.
-                dataSet={{ sanity: posterAttr.toString() }}
+                {...posterAttr}
                 source={{ uri:image }}
                 style={styles.image}
               />}
