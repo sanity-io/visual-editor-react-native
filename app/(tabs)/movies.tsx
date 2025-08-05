@@ -39,7 +39,7 @@ export default function MoviesScreen() {
       </ThemedView>
       {data?.map((movie: Movie) => {
         const { _id, _type, title, slug, poster } = movie
-        const attr = createDataAttributeWebOnly({id: _id, type: _type, path: 'poster'})
+        const posterAttr = createDataAttributeWebOnly({id: _id, type: _type, path: 'poster'})
         const image = urlFor(poster)?.url()
 
         return (
@@ -48,7 +48,7 @@ export default function MoviesScreen() {
             >
               {image && <Image
                 // @ts-expect-error The react-native-web TS types haven't been updated to support dataSet.
-                dataSet={{ sanity: attr.toString() }}
+                dataSet={{ sanity: posterAttr.toString() }}
                 source={{ uri:image }}
                 style={styles.image}
               />}

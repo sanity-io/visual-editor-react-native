@@ -36,7 +36,7 @@ export default function PeopleScreen() {
       </ThemedView>
       {data?.map((person: Person) => {
         const { _id, _type, image, slug, name } = person
-        const attr = createDataAttributeWebOnly({
+        const imageAttr = createDataAttributeWebOnly({
           id: _id,
           type: _type,
           path: 'image'
@@ -45,7 +45,7 @@ export default function PeopleScreen() {
         return (<ThemedView key={slug.current} style={styles.elementContainer}>
           <Image 
           // @ts-expect-error The react-native-web TS types haven't been updated to support dataSet.
-          dataSet={{ sanity: attr.toString() }}
+          dataSet={{ sanity: imageAttr.toString() }}
           source={{ uri: image?.asset?.url }} style={styles.image} />
           <ThemedText type="default">
               <Link 
