@@ -8,7 +8,7 @@
     "build": "npx expo export -p web",
     "deploy:web:staging": "pnpm build && npx eas deploy",
     "deploy:web:prod": "pnpm build && npx eas deploy --prod",
-    "build:simulator": "eas build -p ios --profile preview",
+    "build:simulator": "npx eas@latest build -p ios --profile preview",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
