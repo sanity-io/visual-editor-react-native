@@ -7,13 +7,19 @@ import { usePathname, useRouter } from 'expo-router';
 import { useEffect } from 'react';
 import { client } from '../sanity/client';
 
+function SanityLiveMode() {
+  useLiveMode({client})
+  return null
+}
+
 // This component only has an effect in presentation mode on the web -- it provides clickable overlays of content that enable Visual Editing in the studio.
 export default function SanityVisualEditing() {
   const pathname = usePathname()
   const router = useRouter()
+  const isPresentation = isWeb && isMaybePresentation()
 
   useEffect(() => {
-    const disable = isWeb && isMaybePresentation() ? enableVisualEditing({
+    const disable = isPresentation ? enableVisualEditing({
       history: {
         // Handle user changes to the expo router pathname (e.g. clicking a link in the app) by updating the URL bar
         subscribe: (navigate) => {
@@ -55,13 +61,9 @@ export default function SanityVisualEditing() {
       },
     }) : () => null
     return () => disable()
-  }, [pathname])
+  }, [isPresentation, pathname, router])
 
-  if(isWeb && isMaybePresentation()) {
-    useLiveMode({client })
-  }
-
-  return null
+  return isPresentation ? <SanityLiveMode /> : null
 }
 
 
