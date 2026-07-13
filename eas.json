@@ -17,7 +17,7 @@
       "environment": "preview",
       "ios": {
         "simulator": true,
-        "image": "sdk-53"
+        "image": "sdk-54"
       }
     },
     "production": {
