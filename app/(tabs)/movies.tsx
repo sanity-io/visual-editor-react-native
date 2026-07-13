@@ -46,11 +46,11 @@ export default function MoviesScreen() {
           <ThemedView key={slug.current} style={styles.elementContainer}>
             <ThemedView
             >
-              {image && <Image
+              {image ? <Image
                 {...posterAttr}
                 source={{ uri:image }}
                 style={styles.image}
-              />}
+              /> : null}
             </ThemedView>
             <ThemedText type="default">
               <Link 

@@ -109,7 +109,7 @@ export default function MovieScreen() {
             key={_key}
             style={styles.elementContainer}
             >
-              {imageUrl &&<Image source={{ uri: imageUrl }} style={styles.image} />}
+              {imageUrl ? <Image source={{ uri: imageUrl }} style={styles.image} /> : null}
               <ThemedView>
                 <ThemedText type="default">Character: {characterName}</ThemedText>
                 <ThemedText type="default">Portrayed by: {name}</ThemedText>
