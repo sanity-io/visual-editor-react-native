@@ -2,8 +2,8 @@ import Loading from '@/components/Loading';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { useLiveQuery } from '@/hooks/useLiveQuery';
 import useOptimistic from '@/hooks/useOptimistic';
-import { useQuery } from '@/hooks/useQueryStore';
 import { CastMember, Movie, Person } from '@/types/sanity';
 import { urlFor } from '@/utils/image_url';
 import { createDataAttributeProp } from '@/utils/preview';
@@ -24,7 +24,7 @@ export default function MovieScreen() {
     castMembers
   }`
   
-  const { data } = useQuery<Movie>(query, { movie_slug })
+  const { data } = useLiveQuery<Movie>(query, { movie_slug })
   const { _id = '', _type = '', title, poster, overview, castMembers } = data || {}
   const castMembersOptimistic = useOptimistic<CastMember>(
     castMembers || [],
@@ -37,7 +37,7 @@ export default function MovieScreen() {
   )
 
   const peopleQuery = groq`*[_type == "person" && _id in $personIds]{ ..., image{ ..., asset->{ url } } }`
-  const {data: resolvedPeople = []} = useQuery<Person[]>(peopleQuery, { personIds: castMembersOptimistic.map(castMember => castMember?.person?._ref) })
+  const {data: resolvedPeople = []} = useLiveQuery<Person[]>(peopleQuery, { personIds: castMembersOptimistic.map(castMember => castMember?.person?._ref) })
 
   if (!data) {
     return <Loading/>

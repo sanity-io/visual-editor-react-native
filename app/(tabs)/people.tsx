@@ -2,7 +2,7 @@ import Loading from '@/components/Loading';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { useQuery } from '@/hooks/useQueryStore';
+import { useLiveQuery } from '@/hooks/useLiveQuery';
 import { Person } from '@/types/sanity';
 import { createDataAttributeProp } from '@/utils/preview';
 import { sharedStyles as styles } from '@/utils/styles';
@@ -12,7 +12,7 @@ import { Image } from 'react-native';
 
 export default function PeopleScreen() {
   const query = groq`*[_type == "person"]| order(title asc) { _id, _type, _key, name, slug { current }, image { asset -> { url } } } `
-  const {data} = useQuery<Person[]>(query)
+  const {data} = useLiveQuery<Person[]>(query)
 
   if (!data) {
     return <Loading/>

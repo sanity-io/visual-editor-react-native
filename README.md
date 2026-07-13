@@ -188,7 +188,7 @@ You can start developing by editing the files inside the **app** directory. This
 
 You will almost certainly want to edit the home screen contents, remove the movies/people pages/components, and add your own pages/components, but you'll need to understand how to use several key features before modifying/removing any code. These features are:
 
-- `useQuery`: This hook is required in order to load data from Sanity (which is automatically kept up to date when in Presentation mode -- under the hood the `useLiveMode` hook takes over, but your components should just need `useQuery` because `useLiveMode` is already configured at the app root inside the `SanityVisualEditing` component).
+- `useLiveQuery`: This hook is used in the screens to load data from Sanity and keep it live-updating everywhere. In Presentation mode on web it delegates to React Loader's `useQuery` (so `useLiveMode`, already configured at the app root inside `SanityVisualEditing`, takes over). On native (and web outside Presentation) it connects to the Live Content API directly so content refreshes when editors publish — no manual reload needed. See the "Live Content API" section below and [/hooks/useLiveQuery.ts](/hooks/useLiveQuery.ts). (If you need the raw React Loader hook directly, it's still exported from [/hooks/useQueryStore.ts](/hooks/useQueryStore.ts) as `useQuery`.)
 - `dataSet`: This prop for React Native scalar components (`Image`, `Text`, `View`, etc) is optional, used to enable Visual Editing features for non-text elements. Text elements (strings, rich text, etc) already have click-to-edit enabled by default (because of the `stega` option on our Sanity client). If you want to enable overlays for non-text elements, drag-and-drop for sortable arrays of content blocks, etc, you need to pass `{ sanity: attr }` where the `attr` is a sanity data attribute created using `createDataAttribute`. We have bundled this in a prop generator called `createDataAttributeProp` from [/utils/preview](/utils/preview.ts).
 
 **To understand how to use both of these features in your own pages/components:**
@@ -241,9 +241,38 @@ When you ARE in Presentation mode, `useLiveMode` as implemented above will use t
 
 **In User-Facing Application**
 
-When you are NOT in Presentation mode, to use the Live Content API, you must implement a connection mechanism for it in your project. A package is WIP for an out-of-the-box Live Content API connector for vanilla React and React Native and will be added to this example when available.
+When you are NOT in Presentation mode (e.g. the native iOS/Android build, or the web build outside the Studio iframe), this repo now wires up the Live Content API directly via a `useLiveQuery` hook ([/hooks/useLiveQuery.ts](/hooks/useLiveQuery.ts)). Use it exactly like `useQuery`:
 
-For example/starting point implementations in the meantime, check the [`lcapi-examples` Github Repo](https://github.com/sanity-io/lcapi-examples/tree/main).
+```typescript
+import { useLiveQuery } from '@/hooks/useLiveQuery'
+
+const { data } = useLiveQuery<Movie[]>(query, params)
+```
+
+The shared Live Content API logic lives in [/hooks/useLcapiLiveQuery.ts](/hooks/useLcapiLiveQuery.ts). It:
+
+1. fetches the query with `filterResponse: false` and remembers the `syncTags` returned in the response,
+2. subscribes to `client.live.events()`, and
+3. refetches whenever a live event's tags overlap the stored tags (and on stream `restart`/`reconnect`).
+
+`useLiveQuery` picks the right strategy per platform/context so the screens can call a single hook everywhere:
+
+| Context | Mechanism |
+| --- | --- |
+| Native iOS/Android ([/hooks/useLiveQuery.ts](/hooks/useLiveQuery.ts)) | Live Content API (`useLcapiLiveQuery`) |
+| Web **outside** Presentation, e.g. a normal `localhost` tab ([/hooks/useLiveQuery.web.ts](/hooks/useLiveQuery.web.ts)) | Live Content API (`useLcapiLiveQuery`) |
+| Web **inside** Presentation (Studio iframe) | React Loader `useQuery`, so stega click-to-edit + `useLiveMode` drive updates |
+
+Presentation is detected once at module load via `isMaybePresentation()` (it's fixed for a page's lifetime), which keeps the Rules of Hooks intact.
+
+Notes:
+
+- This streams **published** content and needs no token. To also stream **drafts**, create the client with a viewer token + `useCdn: false` and pass `{ includeDrafts: true }` to `client.live.events()` — but **never ship a token in a client bundle** (see "Querying private data outside Presentation mode" above).
+- `client.live.events()` works in React Native because `@sanity/client` resolves its `react-native` export condition to an XHR-based EventSource polyfill (`event-source-polyfill`). No extra Metro shim is required. In web browsers it uses the native `EventSource`.
+- For the web build outside Presentation, make sure the origin (e.g. `http://localhost:8081`) is in your project's CORS origins at [sanity.io/manage](https://www.sanity.io/manage), otherwise the `client.fetch` and live event stream will be blocked by the browser.
+- Each `useLiveQuery` instance opens its own event stream. The Live Content API has connection limits, so if you fan out to many simultaneous queries consider sharing a single `client.live.events()` subscription; on a `goaway` event you may also want to fall back to polling.
+
+For further example/starting point implementations, check the [`lcapi-examples` Github Repo](https://github.com/sanity-io/lcapi-examples/tree/main).
 
 Learn more about the [Live Content API here](https://www.sanity.io/docs/live-content-api).
 

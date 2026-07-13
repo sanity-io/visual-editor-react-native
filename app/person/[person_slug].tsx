@@ -2,7 +2,7 @@ import Loading from '@/components/Loading';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { useQuery } from '@/hooks/useQueryStore';
+import { useLiveQuery } from '@/hooks/useLiveQuery';
 import { Person } from '@/types/sanity';
 import { urlFor } from '@/utils/image_url';
 import { createDataAttributeProp } from '@/utils/preview';
@@ -21,7 +21,7 @@ export default function PersonScreen() {
     image{..., asset->{url}},
   }`
 
-  const { data } = useQuery<Person>(query, { person_slug })
+  const { data } = useLiveQuery<Person>(query, { person_slug })
 
   if (!data) {
     return <Loading/>

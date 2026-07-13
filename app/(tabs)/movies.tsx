@@ -2,7 +2,7 @@ import Loading from '@/components/Loading';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { useQuery } from '@/hooks/useQueryStore';
+import { useLiveQuery } from '@/hooks/useLiveQuery';
 import { Movie } from '@/types/sanity';
 import { urlFor } from '@/utils/image_url';
 import { createDataAttributeProp } from '@/utils/preview';
@@ -13,7 +13,7 @@ import { Image } from 'react-native';
 
 export default function MoviesScreen() {
   const query = groq`*[_type == "movie"]| order(title asc) { _id, _type, _key, title, slug { current }, poster { ..., asset -> { url } }, ...} `
-  const { data } = useQuery<Movie[]>(query)
+  const { data } = useLiveQuery<Movie[]>(query)
   
   if (!data) {
     return (
