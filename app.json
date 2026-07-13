@@ -7,7 +7,6 @@
     "icon": "./assets/images/squiggle.png",
     "scheme": "visualeditorreactnative",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.johnnypovolny.visualeditorreactnative",
@@ -19,8 +18,7 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/squiggle.png",
         "backgroundColor": "#ffffff"
-      },
-      "edgeToEdgeEnabled": true
+      }
     },
     "web": {
       "bundler": "metro",
